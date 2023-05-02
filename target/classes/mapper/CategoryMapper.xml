@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.time.blog.mapper.CategoryMapper">
+
+
+    <select id="getCategoryList" resultType="com.time.blog.domain.dto.CategoryDTO">
+        SELECT tc.category_name AS name,
+               count(ta.category_id) AS value
+        FROM tm_category tc,
+             tm_article ta
+        WHERE tc.category_id = ta.category_id
+        GROUP BY tc.category_name
+    </select>
+    <select id="getByCateType" resultType="com.time.blog.domain.entity.Article">
+        SELECT ta.*, tc.category_name
+        FROM tm_article ta,
+             tm_category tc
+        WHERE ta.category_id = tc.category_id
+          AND ta.delete_flag = 'N'
+          AND tc.category_id = #{categoryId}
+        ORDER BY ta.creation_date desc
+    </select>
+    <select id="getCateIdByName" resultType="java.lang.Long">
+        select category_id
+        from tm_category
+        where category_name = #{categoryName}
+    </select>
+    <select id="getAllCategory" resultType="com.time.blog.domain.entity.Category">
+        select * from tm_category
+    </select>
+</mapper>
