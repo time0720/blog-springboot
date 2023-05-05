@@ -1,5 +1,9 @@
 server:
   port: 8000
+  ssl:
+    key-store: classpath:time7.top.jks
+    key-store-password: nkrn2pusx3vb
+    key-store-type: JKS
 
 spring:
   datasource:
