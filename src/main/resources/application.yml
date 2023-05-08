@@ -27,7 +27,7 @@ spring:
   jackson:
     time-zone: GMT+8
   minio:
-    endpoint: http://119.91.22.108:9000
+    endpoint: https://time7.top:9000
     bucketName: blog
     accessKey: minioadmin
     secretKey: minioadmin
