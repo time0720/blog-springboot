@@ -7,10 +7,9 @@ import com.time.blog.domain.entity.Comments;
 import com.time.blog.mapper.CommentsMapper;
 import com.time.blog.service.CommentsService;
 import com.time.blog.utils.IpUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
@@ -22,6 +21,7 @@ import java.util.Objects;
  * @author mjw
  * @date 2023/5/9
  */
+@Slf4j
 @Service
 public class CommentsServiceImpl implements CommentsService {
 
@@ -57,6 +57,13 @@ public class CommentsServiceImpl implements CommentsService {
         comments.setAddress(address);
         comments.setCreationDate(new Date());
         comments.setUpvote("0");
+        //TODO：根据用户ID设置头像
+        if (Objects.equals(comments.getCommentsName(), "时光")) {
+            comments.setVia("https://time7.top:9000/blog/web_head.jpg");
+        } else {
+            comments.setVia("https://time7.top:9000/blog/tourists.jpg");
+        }
+        log.info("当前的评论信息为：{}", comments);
         commentsMapper.addComments(comments);
     }
 
