@@ -48,6 +48,7 @@ public class SecurityConfig {
                 // antMatchers("/api")只允许匹配/api，mvcMatchers("/api")还允许/api.html,/api.xyz等等，并且更安全，推荐使用
                 .mvcMatchers("/article/**").permitAll()
                 .mvcMatchers("/category/**").permitAll()
+                .mvcMatchers("/comments/**").permitAll()
                 .mvcMatchers("/minio/**").permitAll()
                 // 对于所有/admin的api，默认只有admin权限才可以使用
                 .mvcMatchers("/admin/**").hasAuthority("admin")
