@@ -8,6 +8,7 @@ import eu.bitwalker.useragentutils.Browser;
 import eu.bitwalker.useragentutils.OperatingSystem;
 import eu.bitwalker.useragentutils.UserAgent;
 import eu.bitwalker.useragentutils.Version;
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
@@ -26,6 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author mjw
@@ -76,10 +78,19 @@ public class OperationLogAspect {
             log.setOperationTime(Timestamp.valueOf(sdf.format(new Date())));
             // 操作用户
             UserAgent userAgent = UserAgent.parseUserAgentString(request.getHeader("User-Agent"));
-            Browser browser = userAgent.getBrowser();
-            OperatingSystem operatingSystem = userAgent.getOperatingSystem();
-            Version browserVersion = userAgent.getBrowserVersion();
-            log.setUserCode(browser.getName() + operatingSystem.getName() + browserVersion.getVersion());
+            if (Objects.isNull(userAgent)) {
+                log.setUserCode("Not Exists");
+            } else {
+                Browser browser = userAgent.getBrowser();
+                OperatingSystem operatingSystem = userAgent.getOperatingSystem();
+                Version browserVersion = userAgent.getBrowserVersion();
+                if (Objects.isNull(browser) || Objects.isNull(operatingSystem) || Objects.isNull(browserVersion)) {
+                    log.setUserCode("Not Exists");
+                } else {
+                    String userCode = browser.getName() + " | " + operatingSystem.getName() + " | " + browserVersion.getVersion();
+                    log.setUserCode(userCode);
+                }
+            }
             // 操作IP
             log.setIp(IpUtils.getIP(request));
             // 返回值信息

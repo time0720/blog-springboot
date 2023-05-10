@@ -16,8 +16,8 @@
     </resultMap>
 
     <update id="saveLog">
-        INSERT INTO tm_log (id, user_code, ip, type, description, model_code, operation_time, result)
-        VALUES (#{id}, #{userCode}, #{ip}, #{type}, #{description}, #{modelCode}, #{operationTime}, #{result})
+        INSERT INTO tm_log (user_code, ip, type, description, model_code, operation_time, result)
+        VALUES (#{userCode}, #{ip}, #{type}, #{description}, #{modelCode}, #{operationTime}, #{result})
     </update>
 
 </mapper>
