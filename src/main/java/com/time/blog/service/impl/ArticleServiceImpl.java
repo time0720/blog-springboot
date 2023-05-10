@@ -64,7 +64,7 @@ public class ArticleServiceImpl implements ArticleService {
         Long categoryId = categoryMapper.getCateIdByName(categoryName);
         if (article.getArticleId() == null) {
             // TODO：完善categoryId和userId
-            article.setCategoryId(1L);
+            article.setCategoryId(categoryId);
             article.setUserId(1L);
             article.setDeleteFlag("N");
             article.setCreationDate(new Date());

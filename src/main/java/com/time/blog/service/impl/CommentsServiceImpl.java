@@ -53,7 +53,7 @@ public class CommentsServiceImpl implements CommentsService {
         comments.setIp(ip);
         String site = IpUtils.getCountry(reader, ip) + "-" + IpUtils.getProvince(reader, ip) + "-" + IpUtils.getCity(reader, ip);
         int index = site.lastIndexOf("-");
-        String address = site.substring(index) + "市";
+        String address = site.substring(index + 1) + "市";
         comments.setAddress(address);
         comments.setCreationDate(new Date());
         comments.setUpvote("0");
