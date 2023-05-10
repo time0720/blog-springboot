@@ -1,6 +1,7 @@
 package com.time.blog.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.time.blog.aop.OperationLogAnnotation;
 import com.time.blog.domain.entity.Article;
 import com.time.blog.reslut.ResponseResult;
 import com.time.blog.service.ArticleService;
@@ -28,24 +29,28 @@ public class ArticleController {
         this.articleService = articleService;
     }
 
+    @OperationLogAnnotation(operModelCode = "ARTICLE", operType = "查询", operDesc = "查询文章")
     @ApiOperation("查询文章")
     @GetMapping("/article/selectArticle")
     public ResponseResult<PageInfo<Article>> selectArticle(int pageNum, int pageSize, Article article) {
         return ResponseResult.success(articleService.selectArticleByCondition(pageNum, pageSize, article));
     }
 
+    @OperationLogAnnotation(operModelCode = "ARTICLE", operType = "查询", operDesc = "所有文章的列表")
     @ApiOperation("所有文章的列表")
     @GetMapping("/article/selectAll")
     public ResponseResult<List<Article>> selectAll() {
         return ResponseResult.success(articleService.selectAll());
     }
 
+    @OperationLogAnnotation(operModelCode = "ARTICLE", operType = "查询", operDesc = "查询文章详情")
     @ApiOperation("查询文章详情")
     @GetMapping("/article/detail/{articleId}")
     public ResponseResult<Article> detail(@PathVariable("articleId") Long articleId) {
         return ResponseResult.success(articleService.detail(articleId));
     }
 
+    @OperationLogAnnotation(operModelCode = "ARTICLE", operType = "删除", operDesc = "删除文章")
     @ApiOperation("删除文章-逻辑删除")
     @PostMapping("/admin/deleteArticles")
     public ResponseResult<Void> deleteArticles(@RequestBody List<Long> articleIds) {
@@ -53,6 +58,7 @@ public class ArticleController {
         return ResponseResult.success();
     }
 
+    @OperationLogAnnotation(operModelCode = "ARTICLE", operType = "保存", operDesc = "保存文章")
     @ApiOperation("保存文章")
     @PostMapping("/admin/saveArticle")
     public ResponseResult<Void> saveArticle(@RequestBody Article article) {

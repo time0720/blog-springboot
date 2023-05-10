@@ -51,9 +51,14 @@ public class CommentsServiceImpl implements CommentsService {
         // 访问IP
         String ip = IpUtils.getIP(request);
         comments.setIp(ip);
+        String address = "";
         String site = IpUtils.getCountry(reader, ip) + "-" + IpUtils.getProvince(reader, ip) + "-" + IpUtils.getCity(reader, ip);
-        int index = site.lastIndexOf("-");
-        String address = site.substring(index + 1) + "市";
+        if ("null".equals(site)) {
+            address = "地球";
+        } else {
+            int index = site.lastIndexOf("-");
+            address = site.substring(index + 1) + "市";
+        }
         comments.setAddress(address);
         comments.setCreationDate(new Date());
         comments.setUpvote("0");

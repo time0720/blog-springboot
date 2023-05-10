@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.time.blog.mapper.LogMapper">
+
+    <resultMap id="BaseResultMap" type="com.time.blog.domain.entity.Log">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="userCode" column="user_code" jdbcType="VARCHAR"/>
+        <result property="ip" column="ip" jdbcType="VARCHAR"/>
+        <result property="type" column="type" jdbcType="VARCHAR"/>
+        <result property="description" column="description" jdbcType="VARCHAR"/>
+        <result property="modelCode" column="model_code" jdbcType="VARCHAR"/>
+        <result property="operationTime" column="operation_time" jdbcType="TIMESTAMP"/>
+        <result property="result" column="result" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <update id="saveLog">
+        INSERT INTO tm_log (id, user_code, ip, type, description, model_code, operation_time, result)
+        VALUES (#{id}, #{userCode}, #{ip}, #{type}, #{description}, #{modelCode}, #{operationTime}, #{result})
+    </update>
+
+</mapper>

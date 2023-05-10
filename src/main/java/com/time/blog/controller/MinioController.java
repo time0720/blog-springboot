@@ -1,5 +1,6 @@
 package com.time.blog.controller;
 
+import com.time.blog.aop.OperationLogAnnotation;
 import com.time.blog.reslut.ResponseResult;
 import com.time.blog.utils.MinioUtils;
 import io.swagger.annotations.Api;
@@ -23,7 +24,7 @@ public class MinioController {
     @Autowired
     private MinioUtils minioUtils;
 
-
+    @OperationLogAnnotation(operModelCode = "MINIO", operType = "上传", operDesc = "上传文件")
     @ApiOperation("上传文件")
     @PostMapping("/upload")
     public ResponseResult<String> upload(@RequestBody MultipartFile file) {
