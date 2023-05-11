@@ -1,14 +1,12 @@
 package com.time.blog.aop;
 
 import com.time.blog.domain.entity.Log;
-import com.time.blog.domain.entity.LogModel;
 import com.time.blog.mapper.LogMapper;
 import com.time.blog.utils.IpUtils;
 import eu.bitwalker.useragentutils.Browser;
 import eu.bitwalker.useragentutils.OperatingSystem;
 import eu.bitwalker.useragentutils.UserAgent;
 import eu.bitwalker.useragentutils.Version;
-import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
@@ -24,10 +22,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author mjw
@@ -60,17 +55,22 @@ public class OperationLogAspect {
             //将返回值转换成map集合
             Map<String, Object> map = objectToMap(result);
             Log log = new Log();
-            LogModel logModel = new LogModel();
             // 从切面织入点处通过反射机制获取织入点处的方法
             MethodSignature signature = (MethodSignature) joinpoint.getSignature();
+            Object[] args = joinpoint.getArgs();
             // 获取切入点所在的方法
             Method method = signature.getMethod();
             // 获取操作
             OperationLogAnnotation annotation = method.getAnnotation(OperationLogAnnotation.class);
+            String operDesc = annotation.operDesc();
+            List<String> operDescList = Arrays.asList("查询文章详情", "根据文章类型查询");
+            if (operDescList.contains(operDesc)) {
+                operDesc += Arrays.toString(args);
+            }
             if (annotation != null) {
                 log.setModelCode(annotation.operModelCode());
                 log.setType(annotation.operType());
-                log.setDescription(annotation.operDesc());
+                log.setDescription(operDesc);
             }
             //设置id
             log.setId(System.currentTimeMillis());

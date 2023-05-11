@@ -36,7 +36,6 @@ public class ArticleController {
         return ResponseResult.success(articleService.selectArticleByCondition(pageNum, pageSize, article));
     }
 
-    @OperationLogAnnotation(operModelCode = "ARTICLE", operType = "查询", operDesc = "所有文章的列表")
     @ApiOperation("所有文章的列表")
     @GetMapping("/article/selectAll")
     public ResponseResult<List<Article>> selectAll() {
