@@ -26,4 +26,11 @@ public interface CommentsService {
      * @param request request
      */
     void addComments(Comments comments, HttpServletRequest request) throws Exception;
+
+    /**
+     * 删除一条评论
+     * @param commentsId commentsId
+     */
+    void deleteComments(Long commentsId);
+
 }

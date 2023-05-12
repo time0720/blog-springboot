@@ -53,6 +53,7 @@ public class CommentsServiceImpl implements CommentsService {
         comments.setIp(ip);
         String address = "";
         String site = IpUtils.getCountry(reader, ip) + "-" + IpUtils.getProvince(reader, ip) + "-" + IpUtils.getCity(reader, ip);
+        log.info("当前的地址为--->{}", site);
         if ("null".equals(site)) {
             address = "地球";
         } else {
@@ -71,5 +72,11 @@ public class CommentsServiceImpl implements CommentsService {
         log.info("当前的评论信息为：{}", comments);
         commentsMapper.addComments(comments);
     }
+
+    @Override
+    public void deleteComments(Long commentsId) {
+        commentsMapper.deleteComments(commentsId);
+    }
+
 
 }

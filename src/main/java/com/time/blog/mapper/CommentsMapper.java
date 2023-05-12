@@ -20,8 +20,14 @@ public interface CommentsMapper {
     List<Comments> selectCommentsByCondition(Long articleId);
 
     /**
-     * 新增一条评论
+     * 删除一条评论
      * @param comments comments
      */
     void addComments(Comments comments);
+
+    /**
+     * 删除一条评论
+     * @param commentsId commentsId
+     */
+    void deleteComments(Long commentsId);
 }

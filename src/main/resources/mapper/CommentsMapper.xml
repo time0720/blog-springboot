@@ -4,7 +4,10 @@
     <select id="selectCommentsByCondition" resultType="com.time.blog.domain.entity.Comments">
         SELECT *
         FROM tm_comments
-        where article_id = #{articleId}
+        where 1 = 1
+        <if test="articleId != null and articleId != ''">
+            AND article_id = #{articleId}
+        </if>
         order by creation_date desc
     </select>
 
@@ -12,4 +15,10 @@
         insert into tm_comments (comments_name, ip, address, creation_date, via, content, parent_id, upvote, article_id)
         values (#{commentsName}, #{ip}, #{address}, #{creationDate}, #{via}, #{content}, #{parentId}, #{upvote}, #{articleId});
     </insert>
+
+    <delete id="deleteComments">
+        delete
+        from tm_comments
+        where comments_id = #{commentsId}
+    </delete>
 </mapper>

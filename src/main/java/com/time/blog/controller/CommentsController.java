@@ -10,10 +10,7 @@ import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -45,6 +42,14 @@ public class CommentsController {
     @PostMapping("/comments/addComments")
     public ResponseResult<Void> addComments(@RequestBody Comments comments, HttpServletRequest request) throws Exception {
         commentsService.addComments(comments, request);
+        return ResponseResult.success();
+    }
+
+    @OperationLogAnnotation(operModelCode = "COMMENTS", operType = "删除", operDesc = "删除一条评论")
+    @ApiModelProperty("删除一条评论")
+    @PostMapping("/admin/deleteComments")
+    public ResponseResult<Void> deleteComments(@RequestParam Long commentsId) {
+        commentsService.deleteComments(commentsId);
         return ResponseResult.success();
     }
 }
