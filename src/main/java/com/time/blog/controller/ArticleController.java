@@ -9,6 +9,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -63,5 +64,12 @@ public class ArticleController {
     public ResponseResult<Void> saveArticle(@RequestBody Article article) {
         articleService.saveArticle(article);
         return ResponseResult.success();
+    }
+
+    @OperationLogAnnotation(operModelCode = "ARTICLE", operType = "查询", operDesc = "使用ES搜索，关键词：")
+    @ApiOperation("使用ES搜索文章")
+    @GetMapping("/article/findByEs")
+    public ResponseResult<List<Article>> findByEs(String keyword) {
+        return ResponseResult.success(articleService.findByEs(keyword));
     }
 }

@@ -63,7 +63,7 @@ public class OperationLogAspect {
             // 获取操作
             OperationLogAnnotation annotation = method.getAnnotation(OperationLogAnnotation.class);
             String operDesc = annotation.operDesc();
-            List<String> operDescList = Arrays.asList("查询文章详情", "根据文章类型查询");
+            List<String> operDescList = Arrays.asList("查询文章详情", "根据文章类型查询", "使用ES搜索，关键词：");
             if (operDescList.contains(operDesc)) {
                 operDesc += Arrays.toString(args);
             }

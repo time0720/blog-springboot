@@ -2,6 +2,7 @@ package com.time.blog.service;
 
 import com.github.pagehelper.PageInfo;
 import com.time.blog.domain.entity.Article;
+import org.springframework.data.elasticsearch.core.SearchHits;
 
 import java.util.List;
 
@@ -45,4 +46,11 @@ public interface ArticleService {
      * @return article
      */
     void saveArticle(Article article);
+
+    /**
+     * 使用ES，根据文章标题和内容搜索
+     * @param keyword 关键词
+     * @return article
+     */
+    List<Article> findByEs(String keyword);
 }

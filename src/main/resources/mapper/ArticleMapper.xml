@@ -50,7 +50,7 @@
         </foreach>
     </update>
 
-    <insert id="insertArticle">
+    <insert id="insertArticle" keyColumn="articleId" useGeneratedKeys="true" keyProperty="articleId">
         insert into tm_article (category_id, user_id, article_title, article_content, article_picture,
                                 delete_flag, creation_date, last_update_time)
         values (#{categoryId}, #{userId}, #{articleTitle}, #{articleContent}, #{articlePicture},

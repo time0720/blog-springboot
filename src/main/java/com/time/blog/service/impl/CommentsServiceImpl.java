@@ -8,6 +8,7 @@ import com.time.blog.mapper.CommentsMapper;
 import com.time.blog.service.CommentsService;
 import com.time.blog.utils.IpUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,7 +55,7 @@ public class CommentsServiceImpl implements CommentsService {
         String address = "";
         String site = IpUtils.getCountry(reader, ip) + "-" + IpUtils.getProvince(reader, ip) + "-" + IpUtils.getCity(reader, ip);
         log.info("当前的地址为--->{}", site);
-        if ("null".equals(site)) {
+        if ("null".equals(site) || StringUtils.isBlank(site)) {
             address = "地球";
         } else {
             int index = site.lastIndexOf("-");
