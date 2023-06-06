@@ -33,4 +33,10 @@ public interface LoginService {
      */
     ResponseResult<?> register(User user);
 
+    /**
+     * 根据token值获取用户头像
+     * @param token token
+     * @return avatar
+     */
+    String getAvatar(String token);
 }

@@ -6,12 +6,15 @@ import com.maxmind.geoip2.DatabaseReader;
 import com.time.blog.domain.entity.Comments;
 import com.time.blog.mapper.CommentsMapper;
 import com.time.blog.service.CommentsService;
+import com.time.blog.service.LoginService;
 import com.time.blog.utils.IpUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.util.Date;
@@ -27,10 +30,12 @@ import java.util.Objects;
 public class CommentsServiceImpl implements CommentsService {
 
     private final CommentsMapper commentsMapper;
+    private final LoginService loginService;
 
     @Autowired
-    public CommentsServiceImpl(CommentsMapper commentsMapper) {
+    public CommentsServiceImpl(CommentsMapper commentsMapper, LoginService loginService) {
         this.commentsMapper = commentsMapper;
+        this.loginService = loginService;
     }
 
     @Override
@@ -64,12 +69,23 @@ public class CommentsServiceImpl implements CommentsService {
         comments.setAddress(address);
         comments.setCreationDate(new Date());
         comments.setUpvote("0");
-        //TODO：根据用户ID设置头像
-        if (Objects.equals(comments.getCommentsName(), "时光")) {
-            comments.setVia("https://time7.top:9000/blog/web_head.jpg");
+        //根据用户设置头像
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("token".equals(cookie.getName())) {
+                    String token = cookie.getValue();
+                    String avatar = loginService.getAvatar(token);
+                    if (StringUtils.isBlank(avatar)) {
+                        comments.setVia("https://time7.top:9000/blog/tourists.jpg");
+                    }
+                    comments.setVia(avatar);
+                }
+            }
         } else {
             comments.setVia("https://time7.top:9000/blog/tourists.jpg");
         }
+
         log.info("当前的评论信息为：{}", comments);
         commentsMapper.addComments(comments);
     }

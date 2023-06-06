@@ -125,4 +125,10 @@ public class LoginServiceImpl implements LoginService {
         userRoleMapper.insert(userRole);
         return new ResponseResult<>(System.currentTimeMillis(),200, "注册成功", user);
     }
+
+    @Override
+    public String getAvatar(String token) {
+        UserDetailDTO userDetailDTO = redisCache.getCacheObject(token);
+        return userDetailDTO.getUser().getAvatar();
+    }
 }
