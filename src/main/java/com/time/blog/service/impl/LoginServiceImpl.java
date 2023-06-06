@@ -1,8 +1,11 @@
 package com.time.blog.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.time.blog.constant.BaseConstants;
 import com.time.blog.domain.dto.TokenDTO;
 import com.time.blog.domain.dto.UserDetailDTO;
 import com.time.blog.domain.entity.User;
+import com.time.blog.mapper.UserMapper;
 import com.time.blog.reslut.ResponseResult;
 import com.time.blog.service.LoginService;
 import com.time.blog.utils.RedisCache;
@@ -12,9 +15,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -33,6 +38,8 @@ public class LoginServiceImpl implements LoginService {
     private AuthenticationManager authenticationManager;
     @Autowired
     private RedisCache redisCache;
+    @Autowired
+    private UserMapper userMapper;
 
     @Override
     public TokenDTO login(User user) {
@@ -83,5 +90,27 @@ public class LoginServiceImpl implements LoginService {
         redisCache.deleteObject(token);
         redisCache.deleteObject(userName);
         return new ResponseResult<>(System.currentTimeMillis(),200, "退出成功", userDetailDTO);
+    }
+
+    @Override
+    public ResponseResult<?> register(User user) {
+        //1.先查询此user_name是否已被注册
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(User::getUserName, user.getUserName());
+        User selectOne = userMapper.selectOne(wrapper);
+        //如果查询不到数据就通过抛出异常来给出提示
+        if (!Objects.isNull(selectOne)) {
+            return new ResponseResult<>(System.currentTimeMillis(), 500, "当前用户名已被注册", user);
+        }
+        //2.初始化数据、存表
+        user.setNickName(BaseConstants.Authentication.USER);
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String encodePwd = encoder.encode(user.getPassword());
+        user.setPassword(encodePwd);
+        user.setDeleteFlag(BaseConstants.N);
+        user.setCreationDate(new Date());
+        user.setLastUpdateTime(new Date());
+        userMapper.insert(user);
+        return new ResponseResult<>(System.currentTimeMillis(),200, "注册成功", user);
     }
 }

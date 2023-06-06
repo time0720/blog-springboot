@@ -24,4 +24,13 @@ public interface LoginService {
      * @return response
      */
     ResponseResult<?> logout(HttpServletRequest request);
+
+    /**
+     * 用户注册
+     *
+     * @param user user
+     * @return response
+     */
+    ResponseResult<?> register(User user);
+
 }

@@ -6,13 +6,19 @@ package com.time.blog.constant;
  */
 public class BaseConstants {
 
-    public static final String YES = "Y";
+    public static final String Y = "Y";
 
-    public static final String NO = "N";
+    public static final String N = "N";
 
     public static final Boolean TRUE = true;
 
     public static final Boolean FALSE = false;
 
 
+    public static class Authentication {
+
+        public static final String USER = "用户";
+
+        public static final String ADMIN = "管理员";
+    }
 }

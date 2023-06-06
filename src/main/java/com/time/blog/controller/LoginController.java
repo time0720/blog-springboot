@@ -42,7 +42,12 @@ public class LoginController {
     @ApiOperation("注销")
     @PostMapping("/logout")
     public ResponseResult<?> logout(HttpServletRequest request){
-        loginService.logout(request);
-        return ResponseResult.success();
+        return loginService.logout(request);
+    }
+
+    @ApiOperation("注册")
+    @PostMapping("/register")
+    public ResponseResult<?> register(@RequestBody User user) {
+       return loginService.register(user);
     }
 }
