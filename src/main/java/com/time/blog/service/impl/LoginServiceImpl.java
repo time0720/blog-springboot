@@ -5,7 +5,9 @@ import com.time.blog.constant.BaseConstants;
 import com.time.blog.domain.dto.TokenDTO;
 import com.time.blog.domain.dto.UserDetailDTO;
 import com.time.blog.domain.entity.User;
+import com.time.blog.domain.entity.UserRole;
 import com.time.blog.mapper.UserMapper;
+import com.time.blog.mapper.UserRoleMapper;
 import com.time.blog.reslut.ResponseResult;
 import com.time.blog.service.LoginService;
 import com.time.blog.utils.RedisCache;
@@ -17,6 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
@@ -29,6 +32,7 @@ import java.util.concurrent.TimeUnit;
  * @date 2023/4/17
  */
 @Slf4j
+@Transactional
 @Service
 public class LoginServiceImpl implements LoginService {
 
@@ -40,6 +44,8 @@ public class LoginServiceImpl implements LoginService {
     private RedisCache redisCache;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private UserRoleMapper userRoleMapper;
 
     @Override
     public TokenDTO login(User user) {
@@ -93,6 +99,7 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public ResponseResult<?> register(User user) {
         //1.先查询此user_name是否已被注册
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
@@ -111,6 +118,11 @@ public class LoginServiceImpl implements LoginService {
         user.setCreationDate(new Date());
         user.setLastUpdateTime(new Date());
         userMapper.insert(user);
+        //3.设置角色信息，默认为user
+        UserRole userRole = new UserRole();
+        userRole.setUserId(user.getUserId());
+        userRole.setRoleId(2L);
+        userRoleMapper.insert(userRole);
         return new ResponseResult<>(System.currentTimeMillis(),200, "注册成功", user);
     }
 }
