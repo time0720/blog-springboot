@@ -1,6 +1,8 @@
 package com.time.blog.service;
 
 import com.time.blog.domain.dto.TokenDTO;
+import com.time.blog.domain.dto.UserDetailDTO;
+import com.time.blog.domain.dto.UserUpdateDTO;
 import com.time.blog.domain.entity.User;
 import com.time.blog.reslut.ResponseResult;
 
@@ -34,9 +36,16 @@ public interface LoginService {
     ResponseResult<?> register(User user);
 
     /**
-     * 根据token值获取用户头像
+     * 根据token值获取当前登录的用户
      * @param token token
-     * @return avatar
+     * @return userInfo
      */
-    String getAvatar(String token);
+    UserDetailDTO getUserInfo(String token);
+
+    /**
+     * 修改用户信息
+     * @param userUpdateDTO userUpdateDTO
+     * @return ResponseResult<?>
+     */
+    ResponseResult<?> updateUser(UserUpdateDTO userUpdateDTO);
 }

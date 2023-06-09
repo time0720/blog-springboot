@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.time.blog.constant.BaseConstants;
 import com.time.blog.domain.dto.TokenDTO;
 import com.time.blog.domain.dto.UserDetailDTO;
+import com.time.blog.domain.dto.UserUpdateDTO;
 import com.time.blog.domain.entity.User;
 import com.time.blog.domain.entity.UserRole;
 import com.time.blog.mapper.UserMapper;
@@ -12,6 +13,7 @@ import com.time.blog.reslut.ResponseResult;
 import com.time.blog.service.LoginService;
 import com.time.blog.utils.RedisCache;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -114,6 +116,8 @@ public class LoginServiceImpl implements LoginService {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String encodePwd = encoder.encode(user.getPassword());
         user.setPassword(encodePwd);
+        // 设置初始头像
+        user.setAvatar("https://time7.top:9000/blog/tourists.jpg");
         user.setDeleteFlag(BaseConstants.N);
         user.setCreationDate(new Date());
         user.setLastUpdateTime(new Date());
@@ -126,9 +130,39 @@ public class LoginServiceImpl implements LoginService {
         return new ResponseResult<>(System.currentTimeMillis(),200, "注册成功", user);
     }
 
+
     @Override
-    public String getAvatar(String token) {
-        UserDetailDTO userDetailDTO = redisCache.getCacheObject(token);
-        return userDetailDTO.getUser().getAvatar();
+    public UserDetailDTO getUserInfo(String token) {
+        return redisCache.getCacheObject(token);
+    }
+
+
+    /**
+     * @param userUpdateDTO userUpdateDTO
+     * @return ResponseResult<?>
+     */
+    @Override
+    public ResponseResult<?> updateUser(UserUpdateDTO userUpdateDTO) {
+        // 1.先更新user表
+        User user = getUserInfo(userUpdateDTO.getToken()).getUser();
+        Long userId = user.getUserId();
+        user.setUserId(userId);
+        user.setNickName(userUpdateDTO.getNickName());
+        user.setAvatar(userUpdateDTO.getAvatar());
+        // 判断有没有更新密码
+        if (StringUtils.isNotEmpty(userUpdateDTO.getPassword())) {
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            String password = passwordEncoder.encode(userUpdateDTO.getPassword());
+            user.setPassword(password);
+        }
+        try {
+            userMapper.updateById(user);
+            // 2.删除缓存
+            redisCache.deleteObject(userUpdateDTO.getToken());
+            redisCache.deleteObject(user.getUserName());
+            return new ResponseResult<>(System.currentTimeMillis(),200, "更新成功", user);
+        } catch (Exception e) {
+            return new ResponseResult<>(System.currentTimeMillis(),500, "更新失败", e.getMessage());
+        }
     }
 }

@@ -2,6 +2,8 @@ package com.time.blog.controller;
 
 import com.time.blog.aop.OperationLogAnnotation;
 import com.time.blog.domain.dto.TokenDTO;
+import com.time.blog.domain.dto.UserDetailDTO;
+import com.time.blog.domain.dto.UserUpdateDTO;
 import com.time.blog.domain.entity.User;
 import com.time.blog.reslut.ResponseResult;
 import com.time.blog.service.LoginService;
@@ -48,9 +50,15 @@ public class LoginController {
        return loginService.register(user);
     }
 
-    @ApiOperation("根据token值获取用户头像")
-    @GetMapping("/getAvatar")
-    public String getAvatar(String token) {
-        return loginService.getAvatar(token);
+    @ApiOperation("根据token值获取当前登录的用户")
+    @GetMapping("/getUserInfo")
+    public UserDetailDTO getUserInfo(String token) {
+        return loginService.getUserInfo(token);
+    }
+
+    @ApiOperation("修改用户信息")
+    @PostMapping("/updateUser")
+    public ResponseResult<?> updateUser(@RequestBody UserUpdateDTO userUpdateDTO) {
+        return loginService.updateUser(userUpdateDTO);
     }
 }

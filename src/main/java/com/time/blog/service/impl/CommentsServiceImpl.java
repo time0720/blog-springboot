@@ -69,23 +69,10 @@ public class CommentsServiceImpl implements CommentsService {
         comments.setAddress(address);
         comments.setCreationDate(new Date());
         comments.setUpvote("0");
-        //根据用户设置头像
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if ("token".equals(cookie.getName())) {
-                    String token = cookie.getValue();
-                    String avatar = loginService.getAvatar(token);
-                    if (StringUtils.isBlank(avatar)) {
-                        comments.setVia("https://time7.top:9000/blog/tourists.jpg");
-                    }
-                    comments.setVia(avatar);
-                }
-            }
-        } else {
+        //如果没有登录，给一个默认的评论人头像
+        if (StringUtils.isBlank(comments.getVia())) {
             comments.setVia("https://time7.top:9000/blog/tourists.jpg");
         }
-
         log.info("当前的评论信息为：{}", comments);
         commentsMapper.addComments(comments);
     }
