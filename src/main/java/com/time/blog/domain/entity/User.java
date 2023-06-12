@@ -41,6 +41,9 @@ public class User implements Serializable {
     @ApiModelProperty("用户头像")
     private String avatar;
 
+    @ApiModelProperty("邮箱地址")
+    private String email;
+
     @ApiModelProperty("删除标识，Y表示删除，N表示未删除")
     private String deleteFlag;
 

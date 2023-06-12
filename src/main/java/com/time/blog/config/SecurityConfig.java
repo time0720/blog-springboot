@@ -50,6 +50,7 @@ public class SecurityConfig {
                 .mvcMatchers("/category/**").permitAll()
                 .mvcMatchers("/comments/**").permitAll()
                 .mvcMatchers("/minio/**").permitAll()
+                .mvcMatchers("/email/**").permitAll()
                 // 对于所有/admin的api，默认只有admin权限才可以使用
                 .mvcMatchers("/admin/**").hasAuthority("admin")
                 //hasAnyRole()是指用户的角色，hasAnyAuthority()是指给不同的角色配置不同的菜单权限
