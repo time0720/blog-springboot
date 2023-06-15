@@ -11,7 +11,8 @@
             AND ta.article_id = #{articleId}
         </if>
         <if test="articleTitle != null and articleTitle != ''">
-            AND ta.article_title = #{articleTitle}
+            <bind name="articleTitleLike" value="'%' + articleTitle + '%'"/>
+            AND ta.article_title like #{articleTitleLike}
         </if>
         <if test="creationDateFrom != null and creationDateFrom != ''">
             AND ta.creation_date >= #{creationDateFrom}

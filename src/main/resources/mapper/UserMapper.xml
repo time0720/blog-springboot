@@ -7,10 +7,12 @@
         FROM tm_user
         WHERE 1 = 1
         <if test="userName != null and userName != ''">
-            AND user_name = #{userName}
+          <bind name="userNameLike" value="'%' + userName + '%'"/>
+            AND user_name like #{userNameLike}
         </if>
         <if test="nickName != null and nickName != ''">
-            AND nick_name = #{nickName}
+            <bind name="nickNameLike" value="'%' + userName + '%'"/>
+            AND nick_name like #{nickNameLike}
         </if>
     </select>
 </mapper>
