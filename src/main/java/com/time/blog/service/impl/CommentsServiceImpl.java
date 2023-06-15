@@ -30,12 +30,10 @@ import java.util.Objects;
 public class CommentsServiceImpl implements CommentsService {
 
     private final CommentsMapper commentsMapper;
-    private final LoginService loginService;
 
     @Autowired
-    public CommentsServiceImpl(CommentsMapper commentsMapper, LoginService loginService) {
+    public CommentsServiceImpl(CommentsMapper commentsMapper) {
         this.commentsMapper = commentsMapper;
-        this.loginService = loginService;
     }
 
     @Override
