@@ -50,6 +50,7 @@ public class SecurityConfig {
                 .mvcMatchers("/category/**").permitAll()
                 .mvcMatchers("/comments/**").permitAll()
                 .mvcMatchers("/user/**").permitAll()
+                .mvcMatchers("/activity/**").permitAll()
                 .mvcMatchers("/minio/**").permitAll()
                 .mvcMatchers("/email/**").permitAll()
                 // 对于所有/admin的api，默认只有admin权限才可以使用
